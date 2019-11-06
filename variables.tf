@@ -1009,6 +1009,11 @@ variable "amazon_side_asn" {
   default     = "64512"
 }
 
+variable "propagate_intra_route_tables_vgw" {
+  description = "Should be true if you want route table propagation"
+  default     = false
+}
+
 variable "propagate_private_route_tables_vgw" {
   description = "Should be true if you want route table propagation"
   default     = false
