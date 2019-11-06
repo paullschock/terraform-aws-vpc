@@ -98,11 +98,11 @@ resource "aws_route" "public_internet_gateway" {
 # There are as many routing tables as the number of NAT gateways
 #################
 resource "aws_route_table" "private" {
-  count = "${var.create_vpc && local.max_subnet_length > 0 ? local.nat_gateway_count : 0}"
+  count = "${var.create_vpc && local.max_subnet_length > 0 ? length(var.private_subnets) : 0}"
 
   vpc_id = "${local.vpc_id}"
 
-  tags = "${merge(map("Name", (var.single_nat_gateway ? "${var.name}-${var.private_subnet_suffix}" : format("%s-${var.private_subnet_suffix}-%s", var.name, element(var.azs, count.index)))), var.tags, var.private_route_table_tags)}"
+  tags = "${merge(map("Name", (var.single_nat_gateway ? format("${var.name}-${var.private_subnet_suffix}-%s", element(var.azs, count.index)) : format("%s-${var.private_subnet_suffix}-%s", var.name, element(var.azs, count.index)))), var.tags, var.private_route_table_tags)}"
 
   lifecycle {
     # When attaching VPN gateways it is common to define aws_vpn_gateway_route_propagation
